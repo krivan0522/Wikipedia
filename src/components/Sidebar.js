@@ -18,7 +18,7 @@ import {
   Upload as UploadIcon,
 } from '@mui/icons-material';
 
-function Sidebar({ featuredTitle, contentsTitle, currentEventsTitle, randomTitle }) {
+function Sidebar({ featuredTitle, contentsTitle, currentEventsTitle, randomTitle, onClose }) {
   const navigationItems = [
     {
       title: 'Navigation',
@@ -61,14 +61,10 @@ function Sidebar({ featuredTitle, contentsTitle, currentEventsTitle, randomTitle
   return (
     <Box
       sx={{
-        width: 200,
-        position: 'relative',
-        top: 0,
-        left: 0,
-        bottom: 0,
+        width: '100%',
+        height: '100%',
         overflowY: 'auto',
         backgroundColor: '#f6f6f6',
-        // borderRight: '1px solid #a2a9b1',
         p: 2,
       }}
     >
@@ -92,13 +88,13 @@ function Sidebar({ featuredTitle, contentsTitle, currentEventsTitle, randomTitle
                 key={item.text}
                 component={RouterLink}
                 to={item.to}
+                onClick={onClose}
                 sx={{
                   color: '#0645ad',
                   textDecoration: 'none',
                   '&:hover': {
                     textDecoration: 'underline',
                   },
-                  py: 0.5,
                 }}
               >
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>

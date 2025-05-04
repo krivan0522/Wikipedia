@@ -175,7 +175,7 @@ function Article() {
   const generateSummaries = async (content) => {
     try {
       const GEMINI_API_KEY = 'AIzaSyDdqMC-irTsZRGcHYVok0TTuvAm5OPpHhA';
-      const prompt = `Generate a TL;DR summary and an ELI5 (Explain Like I'm 5) version of the following article. Keep the length such that anyone can learn with that amount of text. Return as JSON: {"tldr": "...", "eli5": "..."}\n\nArticle:\n${htmlToPlainText(content)}`;
+      const prompt = `Generate a TL;DR(Too Long; Didn't Read) summary in a way that is easy to understand and highlight only crucial points and an ELI5 (Explain Like I'm 5) version of the following article so that it is easy to catch up with the users not of that domain. Return as JSON: {"tldr": "...", "eli5": "..."}\n\nArticle:\n${htmlToPlainText(content)}`;
       
       const response = await fetch(
         `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`,
@@ -266,7 +266,7 @@ function Article() {
   }
 
   return (
-    <Container maxWidth="lg" sx={{ p: 3 }}>
+    <Container maxWidth="lg" sx={{ p: { xs: 1, sm: 2, md: 3 } }}>
       {/* Breadcrumbs */}
       <Breadcrumbs sx={{ mb: 2 }}>
         <Link href="/" sx={{ display: 'flex', alignItems: 'center' }}>
@@ -277,38 +277,53 @@ function Article() {
       </Breadcrumbs>
 
       {/* Article Header */}
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
-        <Typography variant="h1" sx={{ fontSize: '2.5rem', fontWeight: 400, mb: 0 }}>
+      <Box sx={{ 
+        display: 'flex', 
+        flexDirection: { xs: 'column', sm: 'row' },
+        justifyContent: 'space-between', 
+        alignItems: { xs: 'flex-start', sm: 'center' }, 
+        mb: 3,
+        gap: 2
+      }}>
+        <Typography variant="h1" sx={{ 
+          fontSize: { xs: '1.8rem', sm: '2.2rem', md: '2.5rem' }, 
+          fontWeight: 400, 
+          mb: { xs: 1, sm: 0 } 
+        }}>
           {article.title}
         </Typography>
-        <Box>
+        <Box sx={{ 
+          display: 'flex', 
+          flexWrap: 'wrap',
+          gap: 1
+        }}>
           <Tooltip title="View history">
-            <IconButton>
+            <IconButton size={window.innerWidth < 600 ? "small" : "medium"}>
               <HistoryIcon />
             </IconButton>
           </Tooltip>
           <Tooltip title="Edit">
-            <IconButton>
+            <IconButton size={window.innerWidth < 600 ? "small" : "medium"}>
               <EditIcon />
             </IconButton>
           </Tooltip>
           <Tooltip title="View source">
-            <IconButton>
+            <IconButton size={window.innerWidth < 600 ? "small" : "medium"}>
               <LinkIcon />
             </IconButton>
           </Tooltip>
           <Tooltip title="Print">
-            <IconButton>
+            <IconButton size={window.innerWidth < 600 ? "small" : "medium"}>
               <PrintIcon />
             </IconButton>
           </Tooltip>
           <Tooltip title="Download as PDF">
-            <IconButton>
+            <IconButton size={window.innerWidth < 600 ? "small" : "medium"}>
               <DownloadIcon />
             </IconButton>
           </Tooltip>
           <Tooltip title="Languages">
-            <IconButton>
+            <IconButton size={window.innerWidth < 600 ? "small" : "medium"}>
               <LanguageIcon />
             </IconButton>
           </Tooltip>
@@ -316,14 +331,27 @@ function Article() {
       </Box>
 
       {/* Summary Section */}
-      <Paper sx={{ mb: 3, p: 2, border: '1px solid #a2a9b1', background: '#f8f9fa' }}>
+      <Paper sx={{ 
+        mb: 3, 
+        p: { xs: 1, sm: 2 }, 
+        border: '1px solid #a2a9b1', 
+        background: '#f8f9fa' 
+      }}>
         <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
           <LightbulbIcon sx={{ mr: 1, color: '#3366cc' }} />
-          <Typography variant="h6" sx={{ fontWeight: 700, color: '#222' }}>
-            TL;DR Summary
+          <Typography variant="h6" sx={{ 
+            fontWeight: 700, 
+            color: '#222',
+            fontSize: { xs: '1rem', sm: '1.1rem' }
+          }}>
+            Too Long;Didn't Read
           </Typography>
         </Box>
-        <Typography variant="body1" sx={{ color: '#222', mb: 2 }}>
+        <Typography variant="body1" sx={{ 
+          color: '#222', 
+          mb: 2,
+          fontSize: { xs: '0.9rem', sm: '1rem' }
+        }}>
           {tldrSummary || 'Generating summary...'}
         </Typography>
         
@@ -346,13 +374,21 @@ function Article() {
           >
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
               <SchoolIcon sx={{ mr: 1, color: '#3366cc' }} />
-              <Typography variant="h6" sx={{ fontWeight: 700, color: '#222' }}>
+              <Typography variant="h6" sx={{ 
+                fontWeight: 700, 
+                color: '#222',
+                fontSize: { xs: '1rem', sm: '1.1rem' }
+              }}>
                 Explain Like I'm 5
               </Typography>
             </Box>
           </AccordionSummary>
           <AccordionDetails sx={{ p: 0 }}>
-            <Typography variant="body1" sx={{ color: '#222', mt: 2 }}>
+            <Typography variant="body1" sx={{ 
+              color: '#222', 
+              mt: 2,
+              fontSize: { xs: '0.9rem', sm: '1rem' }
+            }}>
               {eli5Summary || 'Generating ELI5 version...'}
             </Typography>
           </AccordionDetails>
@@ -361,7 +397,13 @@ function Article() {
 
       {/* Generate Flashcards Button */}
       <Box sx={{ mb: 2 }}>
-        <Button variant="contained" color="primary" onClick={generateFlashcards} disabled={flashLoading}>
+        <Button 
+          variant="contained" 
+          color="primary" 
+          onClick={generateFlashcards} 
+          disabled={flashLoading}
+          fullWidth={window.innerWidth < 600}
+        >
           {flashLoading ? 'Generating Flashcards...' : 'Generate Flashcards'}
         </Button>
         {flashError && <Typography color="error" sx={{ mt: 1 }}>{flashError}</Typography>}
@@ -402,10 +444,9 @@ function Article() {
       </Paper>
 
       {/* Article Content */}
-      <Grid container spacing={4}>
-        {/* Main Content */}
+      <Grid container spacing={{ xs: 2, md: 4 }}>
         <Grid item xs={12} md={9}>
-          <Paper sx={{ p: 3 }}>
+          <Paper sx={{ p: { xs: 2, sm: 3 } }}>
             <Box
               component="div"
               dangerouslySetInnerHTML={{ __html: rewriteWikiLinks(article.content) }}
@@ -416,10 +457,12 @@ function Article() {
                     paddingBottom: '0.17em',
                     marginBottom: '0.6em',
                     marginTop: '0.6em',
+                    fontSize: { xs: '1.2rem', sm: '1.5rem', md: '1.8rem' },
                   },
                   '& p': {
                     margin: '0.5em 0',
                     lineHeight: 1.6,
+                    fontSize: { xs: '0.9rem', sm: '1rem' },
                   },
                   '& a': {
                     color: '#0645ad',
@@ -431,25 +474,26 @@ function Article() {
                   '& ul, & ol': {
                     margin: '0.3em 0 0 1.6em',
                     padding: 0,
+                    fontSize: { xs: '0.9rem', sm: '1rem' },
                   },
                   '& li': {
                     marginBottom: '0.1em',
                   },
                   '& .infobox': {
-                    float: 'right',
-                    clear: 'right',
-                    margin: '0.5em 0 1em 1em',
+                    float: { xs: 'none', sm: 'right' },
+                    clear: { xs: 'both', sm: 'right' },
+                    margin: { xs: '1em 0', sm: '0.5em 0 1em 1em' },
                     padding: '0.2em',
                     border: '1px solid #a2a9b1',
                     backgroundColor: '#f8f9fa',
                     fontSize: '88%',
                     lineHeight: 1.5,
-                    width: '22em',
+                    width: { xs: '100%', sm: '22em' },
                   },
                   '& .thumb': {
-                    float: 'right',
-                    clear: 'right',
-                    margin: '0.5em 0 1em 1em',
+                    float: { xs: 'none', sm: 'right' },
+                    clear: { xs: 'both', sm: 'right' },
+                    margin: { xs: '1em 0', sm: '0.5em 0 1em 1em' },
                     padding: '0.2em',
                     border: '1px solid #a2a9b1',
                     backgroundColor: '#f8f9fa',
