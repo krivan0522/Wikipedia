@@ -77,8 +77,9 @@ function Home() {
       </Paper>
 
       <Grid container spacing={3}>
-        {/* Featured Article */}
-        <Grid item xs={12} md={8}>
+        {/* Left Column */}
+        <Grid item xs={12} md={6}>
+          {/* Featured Article */}
           <Paper elevation={0} sx={{ border: '1px solid #a2a9b1', background: '#f5fff5', mb: 2 }}>
             <Box sx={sectionHeaderStyle}>From today's featured article</Box>
             <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, p: 2 }}>
@@ -99,96 +100,50 @@ function Home() {
                 <Typography variant="body1" sx={{ color: '#222', fontSize: '1rem' }}>
                   {featuredArticles[0]?.extract}
                 </Typography>
-                <Link href={`/article/${encodeURIComponent(featuredArticles[0]?.title)}`} sx={{ color: '#0645ad', fontSize: '0.95rem' }}>
-                  (Full article...)
+              </Box>
+            </Box>
+          </Paper>
+
+          {/* In the News */}
+          <Paper elevation={0} sx={{ border: '1px solid #a2a9b1', background: '#f5faff', mb: 2 }}>
+            <Box sx={newsHeaderStyle}>In the news</Box>
+            <Box sx={{ p: 2 }}>
+              <Typography variant="body1" sx={{ color: '#222', fontSize: '1rem' }}>
+                {featuredArticles[1]?.extract}
+              </Typography>
+            </Box>
+          </Paper>
+        </Grid>
+
+        {/* Right Column */}
+        <Grid item xs={12} md={6}>
+          {/* Did you know */}
+          <Paper elevation={0} sx={{ border: '1px solid #a2a9b1', background: '#f5fff5', mb: 2 }}>
+            <Box sx={sectionHeaderStyle}>Did you know...</Box>
+            <Box sx={{ p: 2 }}>
+              <Typography variant="body1" sx={{ color: '#222', fontSize: '1rem' }}>
+                {featuredArticles[2]?.extract}
+              </Typography>
+            </Box>
+          </Paper>
+
+          {/* Random Article */}
+          <Paper elevation={0} sx={{ border: '1px solid #a2a9b1', background: '#f5faff', mb: 2 }}>
+            <Box sx={newsHeaderStyle}>Random article</Box>
+            <Box sx={{ p: 2 }}>
+              <Typography variant="body1" sx={{ color: '#222', fontSize: '1rem' }}>
+                {randomArticle?.extract}
+              </Typography>
+              <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
+                <Link href={`/article/${encodeURIComponent(randomArticle?.title)}`} sx={{ color: '#0645ad' }}>
+                  <CasinoIcon sx={{ mr: 1 }} />
+                  Read another random article
                 </Link>
               </Box>
             </Box>
           </Paper>
         </Grid>
-
-        {/* In The News */}
-        <Grid item xs={12} md={4}>
-          <Paper elevation={0} sx={{ border: '1px solid #a2a9b1', background: '#f8fcff', mb: 2 }}>
-            <Box sx={newsHeaderStyle}>In the news</Box>
-            <Box sx={{ p: 2 }}>
-              <List sx={{ pl: 2 }}>
-                {featuredArticles.slice(1, 5).map((article) => (
-                  <ListItem key={article.title} sx={{ display: 'list-item', listStyleType: 'disc', color: '#222', fontSize: '1rem', py: 0.5 }}>
-                    <Link href={`/article/${encodeURIComponent(article.title)}`} sx={{ color: '#0645ad', fontWeight: 500 }}>
-                      {article.title}
-                    </Link>
-                    {article.extract && <Box component="span" sx={{ color: '#222', ml: 0.5 }}>{article.extract}</Box>}
-                  </ListItem>
-                ))}
-              </List>
-            </Box>
-          </Paper>
-        </Grid>
       </Grid>
-
-      {/* Did You Know & On This Day */}
-      <Grid container spacing={3} sx={{ mt: 0 }}>
-        <Grid item xs={12} md={6}>
-          <Paper elevation={0} sx={{ border: '1px solid #a2a9b1', background: '#f5fff5', mb: 2 }}>
-            <Box sx={sectionHeaderStyle}>Did you know ...</Box>
-            <Box sx={{ p: 2 }}>
-              <List sx={{ pl: 2 }}>
-                {featuredArticles.slice(5, 8).map((article) => (
-                  <ListItem key={article.title} sx={{ display: 'list-item', listStyleType: 'disc', color: '#222', fontSize: '1rem', py: 0.5 }}>
-                    <Link href={`/article/${encodeURIComponent(article.title)}`} sx={{ color: '#0645ad', fontWeight: 500 }}>
-                      {article.title}
-                    </Link>
-                    {article.extract && <Box component="span" sx={{ color: '#222', ml: 0.5 }}>{article.extract}</Box>}
-                  </ListItem>
-                ))}
-              </List>
-            </Box>
-          </Paper>
-        </Grid>
-        <Grid item xs={12} md={6}>
-          <Paper elevation={0} sx={{ border: '1px solid #a2a9b1', background: '#f8fcff', mb: 2 }}>
-            <Box sx={newsHeaderStyle}>On this day</Box>
-            <Box sx={{ p: 2 }}>
-              <List sx={{ pl: 2 }}>
-                {featuredArticles.slice(8, 11).map((article) => (
-                  <ListItem key={article.title} sx={{ display: 'list-item', listStyleType: 'disc', color: '#222', fontSize: '1rem', py: 0.5 }}>
-                    <Link href={`/article/${encodeURIComponent(article.title)}`} sx={{ color: '#0645ad', fontWeight: 500 }}>
-                      {article.title}
-                    </Link>
-                    {article.extract && <Box component="span" sx={{ color: '#222', ml: 0.5 }}>{article.extract}</Box>}
-                  </ListItem>
-                ))}
-              </List>
-            </Box>
-          </Paper>
-        </Grid>
-      </Grid>
-
-      {/* Random Article */}
-      {randomArticle && (
-        <Paper elevation={0} sx={{ border: '1px solid #a2a9b1', background: '#fff9db', mt: 2, mb: 2 }}>
-          <Box sx={{ display: 'flex', alignItems: 'center', background: '#fff3b0', borderBottom: '1px solid #a2a9b1', px: 2, py: 1 }}>
-            <CasinoIcon sx={{ color: '#b59f3b', mr: 1 }} />
-            <Typography variant="h6" sx={{ fontWeight: 700, fontSize: '1.1rem', color: '#222', m: 0 }}>
-              Random article
-            </Typography>
-          </Box>
-          <Box sx={{ p: 2 }}>
-            <Typography variant="h3" sx={{ fontSize: '1.2rem', fontWeight: 700, mb: 1 }}>
-              <Link href={`/article/${encodeURIComponent(randomArticle.title)}`} sx={{ color: '#0645ad' }}>
-                {randomArticle.title}
-              </Link>
-            </Typography>
-            <Typography variant="body1" sx={{ color: '#444', fontSize: '1rem', mb: 1 }}>
-              {randomArticle.extract}
-            </Typography>
-            <Link href={`/article/${encodeURIComponent(randomArticle.title)}`} sx={{ color: '#0645ad', fontSize: '0.95rem' }}>
-              (Read full article)
-            </Link>
-          </Box>
-        </Paper>
-      )}
     </Container>
   );
 }

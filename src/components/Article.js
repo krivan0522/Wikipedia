@@ -16,6 +16,10 @@ import {
   Modal,
   Card,
   CardContent,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+  Chip,
 } from '@mui/material';
 import {
   Home as HomeIcon,
@@ -26,6 +30,9 @@ import {
   Download as DownloadIcon,
   Language as LanguageIcon,
   Close as CloseIcon,
+  ExpandMore as ExpandMoreIcon,
+  Lightbulb as LightbulbIcon,
+  School as SchoolIcon,
 } from '@mui/icons-material';
 import { getArticle } from '../services/wikipediaApi';
 
@@ -138,6 +145,9 @@ function Article() {
   const [article, setArticle] = useState(null);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState(0);
+  const [tldrSummary, setTldrSummary] = useState('');
+  const [eli5Summary, setEli5Summary] = useState('');
+  const [showEli5, setShowEli5] = useState(false);
 
   // Flashcard state
   const [flashcards, setFlashcards] = useState([]);
@@ -151,6 +161,7 @@ function Article() {
       try {
         const data = await getArticle(title);
         setArticle(data);
+        generateSummaries(data.content);
         setLoading(false);
       } catch (error) {
         console.error('Error fetching article:', error);
@@ -159,6 +170,38 @@ function Article() {
     };
     fetchArticle();
   }, [title]);
+
+  // Generate TL;DR and ELI5 summaries using Gemini API
+  const generateSummaries = async (content) => {
+    try {
+      const GEMINI_API_KEY = 'AIzaSyDdqMC-irTsZRGcHYVok0TTuvAm5OPpHhA';
+      const prompt = `Generate a TL;DR summary and an ELI5 (Explain Like I'm 5) version of the following article. Keep the length such that anyone can learn with that amount of text. Return as JSON: {"tldr": "...", "eli5": "..."}\n\nArticle:\n${htmlToPlainText(content)}`;
+      
+      const response = await fetch(
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            contents: [{ parts: [{ text: prompt }] }],
+          }),
+        }
+      );
+      const data = await response.json();
+      let summaries = {};
+      try {
+        let text = data.candidates[0].content.parts[0].text;
+        text = text.replace(/```json|```/g, '').trim();
+        summaries = JSON.parse(text);
+        setTldrSummary(summaries.tldr);
+        setEli5Summary(summaries.eli5);
+      } catch (e) {
+        console.error('Could not parse summaries from Gemini response.');
+      }
+    } catch (err) {
+      console.error('Failed to generate summaries.');
+    }
+  };
 
   // Gemini API call for flashcards
   const generateFlashcards = async () => {
@@ -271,6 +314,50 @@ function Article() {
           </Tooltip>
         </Box>
       </Box>
+
+      {/* Summary Section */}
+      <Paper sx={{ mb: 3, p: 2, border: '1px solid #a2a9b1', background: '#f8f9fa' }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+          <LightbulbIcon sx={{ mr: 1, color: '#3366cc' }} />
+          <Typography variant="h6" sx={{ fontWeight: 700, color: '#222' }}>
+            TL;DR Summary
+          </Typography>
+        </Box>
+        <Typography variant="body1" sx={{ color: '#222', mb: 2 }}>
+          {tldrSummary || 'Generating summary...'}
+        </Typography>
+        
+        <Accordion 
+          expanded={showEli5} 
+          onChange={() => setShowEli5(!showEli5)}
+          sx={{ 
+            background: 'transparent',
+            boxShadow: 'none',
+            '&:before': { display: 'none' }
+          }}
+        >
+          <AccordionSummary
+            expandIcon={<ExpandMoreIcon />}
+            sx={{ 
+              p: 0,
+              minHeight: 'auto',
+              '& .MuiAccordionSummary-content': { my: 0 }
+            }}
+          >
+            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+              <SchoolIcon sx={{ mr: 1, color: '#3366cc' }} />
+              <Typography variant="h6" sx={{ fontWeight: 700, color: '#222' }}>
+                Explain Like I'm 5
+              </Typography>
+            </Box>
+          </AccordionSummary>
+          <AccordionDetails sx={{ p: 0 }}>
+            <Typography variant="body1" sx={{ color: '#222', mt: 2 }}>
+              {eli5Summary || 'Generating ELI5 version...'}
+            </Typography>
+          </AccordionDetails>
+        </Accordion>
+      </Paper>
 
       {/* Generate Flashcards Button */}
       <Box sx={{ mb: 2 }}>

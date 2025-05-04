@@ -43,7 +43,12 @@ function Navbar() {
       <Toolbar sx={{ justifyContent: 'space-between' }}>
         {/* Left Section */}
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
-          <Link href="/" sx={{ textDecoration: 'none', color: 'inherit' }}>
+          <Link href="/" sx={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center' }}>
+            <img 
+              src="/wiki.svg" 
+              alt="Wikipedia" 
+              style={{ height: '40px', marginRight: '8px' }} 
+            />
             <Typography variant="h6" component="div">
               Wikipedia
             </Typography>
