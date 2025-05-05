@@ -174,11 +174,11 @@ function Article() {
   // Generate TL;DR and ELI5 summaries using Gemini API
   const generateSummaries = async (content) => {
     try {
-      const GEMINI_API_KEY = 'AIzaSyDdqMC-irTsZRGcHYVok0TTuvAm5OPpHhA';
+      // const GEMINI_API_KEY = 'AIzaSyDdqMC-irTsZRGcHYVok0TTuvAm5OPpHhA';
       const prompt = `Generate a TL;DR(Too Long; Didn't Read) summary in a way that is easy to understand and highlight only crucial points and an ELI5 (Explain Like I'm 5) version of the following article so that it is easy to catch up with the users not of that domain. Return as JSON: {"tldr": "...", "eli5": "..."}\n\nArticle:\n${htmlToPlainText(content)}`;
       
       const response = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`,
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${process.env.REACT_APP_GEMINI_API_KEY}`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -211,11 +211,11 @@ function Article() {
     setFlashIndex(0);
     try {
       // --- INSERT YOUR GEMINI API KEY BELOW ---
-      const GEMINI_API_KEY = 'AIzaSyDdqMC-irTsZRGcHYVok0TTuvAm5OPpHhA';
+      // const GEMINI_API_KEY = 'AIzaSyDdqMC-irTsZRGcHYVok0TTuvAm5OPpHhA';
       // ----------------------------------------
       const prompt = `Generate 10 learning flashcards (question and answer pairs) from the following article. Return as a JSON array with objects: {"question": "...", "answer": "..."}.\n\nArticle:\n${htmlToPlainText(article.content)}`;
       const response = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`,
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${process.env.REACT_APP_GEMINI_API_KEY}`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -344,7 +344,7 @@ function Article() {
             color: '#222',
             fontSize: { xs: '1rem', sm: '1.1rem' }
           }}>
-            Too Long;Didn't Read
+            Too Long; Didn't Read
           </Typography>
         </Box>
         <Typography variant="body1" sx={{ 

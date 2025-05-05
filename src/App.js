@@ -131,7 +131,7 @@ function App() {
                 overflow: 'auto',
                 backgroundColor: '#ffffff',
                 minHeight: 'calc(100vh - 64px)',
-                ml: { xs: 0, md: sidebarOpen ? '220px' : 0 },
+                ml: { xs: 0, md: sidebarOpen ? '0' : 0 },
                 transition: 'margin-left 0.2s',
               }}
             >
